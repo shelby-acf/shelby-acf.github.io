@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gameplay Tools · ACF / The Sport Authenticator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0B0B0A;--panel:#161614;--chalk:#F4F4F1;--muted:#8B8B82;--volt:#CDFF00;--hairline:#2B2B27}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--chalk);font-family:'Archivo',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100dvh;display:flex;flex-direction:column}
+.wrap{max-width:640px;margin:0 auto;padding:64px 24px 40px;width:100%;flex:1}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--volt);margin-bottom:16px}
+h1{font-family:'Archivo Black',sans-serif;font-size:clamp(32px,8vw,52px);line-height:.98;text-transform:uppercase;margin-bottom:18px}
+h1 .volt{color:var(--volt)}
+.lede{color:var(--muted);max-width:52ch;margin-bottom:44px}
+a.tool{display:block;text-decoration:none;color:var(--chalk);border:1px solid var(--hairline);background:var(--panel);padding:22px;margin-bottom:14px;transition:border-color .15s ease}
+a.tool:hover,a.tool:focus-visible{border-color:var(--volt);outline:none}
+a.tool .t-name{font-family:'Archivo Black',sans-serif;font-size:18px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+a.tool .t-name::after{content:"→";color:var(--volt);font-family:'IBM Plex Mono',monospace;font-size:15px}
+a.tool .t-desc{color:var(--muted);font-size:14px;margin-top:6px}
+a.tool .t-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--volt);margin-bottom:8px}
+footer{max-width:640px;margin:0 auto;width:100%;padding:22px 24px 44px;border-top:1px solid var(--hairline);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#55554E}
+footer b{color:var(--volt);font-weight:500}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">ACF / The Sport Authenticator</div>
+  <h1>Gameplay<br><span class="volt">Tools</span></h1>
+  <p class="lede">Purpose built tools for running events the right way. Every event on the same page, every official briefed, every rule on the record.</p>
+
+  <a class="tool" href="/rules-intake/">
+    <div class="t-tag">Pre Event</div>
+    <div class="t-name">Tournament Rules Intake</div>
+    <div class="t-desc">Organizers document their complete rule set in about 5 minutes. Custom rules get flagged for officials automatically.</div>
+  </a>
+
+  <a class="tool" href="/winner-stays/">
+    <div class="t-tag">Game Day</div>
+    <div class="t-name">Winner Stays</div>
+    <div class="t-desc">Single court tournament manager. Queue, rotation, and win tracking in one screen.</div>
+  </a>
+</div>
+<footer><b>ACF</b> / The Sport Authenticator</footer>
+</body>
+</html>
