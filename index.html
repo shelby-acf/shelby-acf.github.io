@@ -2,49 +2,800 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gameplay Tools · ACF / The Sport Authenticator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tournament Rules Intake · ACF / The Sport Authenticator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0B0B0A;--panel:#161614;--chalk:#F4F4F1;--muted:#8B8B82;--volt:#CDFF00;--hairline:#2B2B27}
+:root{
+  --ink:#0B0B0A;
+  --panel:#161614;
+  --panel2:#1E1E1B;
+  --chalk:#F4F4F1;
+  --muted:#8B8B82;
+  --volt:#CDFF00;
+  --hairline:#2B2B27;
+  --radius:2px;
+  --pad:20px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--ink);color:var(--chalk);font-family:'Archivo',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100dvh;display:flex;flex-direction:column}
-.wrap{max-width:640px;margin:0 auto;padding:64px 24px 40px;width:100%;flex:1}
-.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--volt);margin-bottom:16px}
-h1{font-family:'Archivo Black',sans-serif;font-size:clamp(32px,8vw,52px);line-height:.98;text-transform:uppercase;margin-bottom:18px}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--chalk);
+  font-family:'Archivo',system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100dvh;
+}
+button{font:inherit}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(11,11,10,.94);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--hairline);
+}
+.topbar-inner{
+  max-width:640px;margin:0 auto;padding:12px var(--pad) 10px;
+}
+.topbar .brand{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+  color:var(--muted);text-transform:uppercase;
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+}
+.topbar .brand b{color:var(--volt);font-weight:500}
+.topbar .stepcount{color:var(--muted);white-space:nowrap}
+.meter{height:3px;background:var(--hairline);margin-top:10px}
+.meter-fill{height:100%;width:0%;background:var(--volt);transition:width .3s ease}
+
+/* ---------- screens ---------- */
+.wrap{max-width:640px;margin:0 auto;padding:28px var(--pad) 130px}
+.screen{display:none}
+.screen.active{display:block;animation:rise .25s ease}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--volt);margin-bottom:12px;
+}
+h1{
+  font-family:'Archivo Black',sans-serif;
+  font-size:clamp(30px,8vw,44px);
+  line-height:1;letter-spacing:-.01em;text-transform:uppercase;
+  margin-bottom:16px;
+}
 h1 .volt{color:var(--volt)}
-.lede{color:var(--muted);max-width:52ch;margin-bottom:44px}
-a.tool{display:block;text-decoration:none;color:var(--chalk);border:1px solid var(--hairline);background:var(--panel);padding:22px;margin-bottom:14px;transition:border-color .15s ease}
-a.tool:hover,a.tool:focus-visible{border-color:var(--volt);outline:none}
-a.tool .t-name{font-family:'Archivo Black',sans-serif;font-size:18px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-a.tool .t-name::after{content:"→";color:var(--volt);font-family:'IBM Plex Mono',monospace;font-size:15px}
-a.tool .t-desc{color:var(--muted);font-size:14px;margin-top:6px}
-a.tool .t-tag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--volt);margin-bottom:8px}
-footer{max-width:640px;margin:0 auto;width:100%;padding:22px 24px 44px;border-top:1px solid var(--hairline);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#55554E}
+h2{
+  font-family:'Archivo Black',sans-serif;font-size:24px;text-transform:uppercase;
+  margin-bottom:6px;line-height:1.05;
+}
+.intro{color:var(--muted);font-size:15px;margin-bottom:6px;max-width:56ch}
+.sec-rule{height:1px;background:var(--volt);opacity:.55;margin:16px 0 24px}
+
+/* ---------- questions ---------- */
+.q{margin-bottom:26px}
+.q > label.qlabel{
+  display:block;font-family:'IBM Plex Mono',monospace;font-size:11.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:10px;
+}
+.q input[type=text],.q textarea{
+  width:100%;background:var(--panel);border:1px solid var(--hairline);
+  color:var(--chalk);padding:14px;font-family:'Archivo',sans-serif;
+  font-size:16px;border-radius:var(--radius);outline:none;
+  transition:border-color .15s ease;
+}
+.q textarea{min-height:96px;resize:vertical}
+.q input:focus,.q textarea:focus{border-color:var(--volt)}
+.q input::placeholder,.q textarea::placeholder{color:#55554E}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{
+  display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;
+  border:1px solid var(--hairline);background:var(--panel);
+  font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.04em;
+  color:var(--chalk);cursor:pointer;user-select:none;border-radius:var(--radius);
+  transition:background .12s,border-color .12s,color .12s;
+}
+.chip input:checked + span{
+  background:var(--volt);border-color:var(--volt);color:var(--ink);font-weight:500;
+}
+.chip input:focus-visible + span{outline:2px solid var(--volt);outline-offset:2px}
+.otherbox{margin-top:10px;display:none}
+.otherbox.show{display:block}
+
+.tpl-note{
+  font-size:13px;color:var(--muted);border-left:2px solid var(--volt);
+  padding-left:12px;margin-top:14px;max-width:56ch;
+}
+
+/* ---------- review ---------- */
+.rev-group{margin-bottom:26px}
+.rev-group h3{
+  font-family:'Archivo Black',sans-serif;font-size:14px;text-transform:uppercase;
+  color:var(--volt);margin-bottom:2px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:10px;
+}
+.rev-group h3 button{
+  background:none;border:none;color:var(--muted);cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;
+}
+.rev-group h3 button:hover{color:var(--volt)}
+.rev-rule{height:1px;background:var(--hairline);margin:8px 0 12px}
+.rev-item{
+  display:flex;justify-content:space-between;gap:14px;padding:7px 0;
+  font-size:14.5px;border-bottom:1px dotted #22221F;
+}
+.rev-item .rk{color:var(--muted);flex:0 0 46%}
+.rev-item .rv{text-align:right;overflow-wrap:anywhere}
+.rev-item .rv .none{color:#55554E}
+.tag-custom{
+  display:inline-block;background:var(--volt);color:var(--ink);
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:500;
+  letter-spacing:.1em;padding:2px 6px;margin-left:8px;vertical-align:middle;
+}
+.custom-count{
+  border:1px solid var(--volt);background:rgba(205,255,0,.06);padding:14px 16px;
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--volt);
+  letter-spacing:.05em;margin-bottom:26px;
+}
+
+/* ---------- attestation ---------- */
+.attest{
+  border:1px solid var(--hairline);background:var(--panel);
+  padding:18px;margin-bottom:22px;
+}
+.attest .row{display:flex;gap:12px;align-items:flex-start}
+.attest input[type=checkbox]{
+  appearance:none;width:22px;height:22px;border:1px solid var(--muted);
+  background:var(--ink);cursor:pointer;flex:none;margin-top:2px;position:relative;
+}
+.attest input[type=checkbox]:checked{background:var(--volt);border-color:var(--volt)}
+.attest input[type=checkbox]:checked::after{
+  content:"";position:absolute;inset:4px;background:var(--ink);
+  clip-path:polygon(14% 44%,0 60%,40% 100%,100% 16%,84% 2%,40% 70%);
+}
+.attest p{font-size:14px}
+.err{
+  display:none;color:var(--volt);font-family:'IBM Plex Mono',monospace;
+  font-size:12px;letter-spacing:.05em;margin-top:12px;
+  border-left:2px solid var(--volt);padding-left:10px;
+}
+
+/* ---------- done ---------- */
+.done-mark{
+  width:64px;height:64px;border:2px solid var(--volt);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;margin-bottom:22px;
+}
+.done-mark::after{
+  content:"";width:26px;height:26px;background:var(--volt);
+  clip-path:polygon(14% 44%,0 60%,40% 100%,100% 16%,84% 2%,40% 70%);
+}
+.done-detail{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--muted);
+  letter-spacing:.05em;margin:18px 0 26px;line-height:1.9;
+}
+.done-detail b{color:var(--volt);font-weight:500}
+
+/* ---------- buttons / nav ---------- */
+.btn{
+  font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.08em;
+  text-transform:uppercase;padding:15px 22px;cursor:pointer;
+  border-radius:var(--radius);border:1px solid var(--volt);
+  transition:transform .08s ease,opacity .12s;min-height:48px;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--volt);color:var(--ink);font-weight:500}
+.btn-ghost{background:transparent;color:var(--volt)}
+.btn:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.btn[disabled]{opacity:.35;cursor:default}
+.btn-row{display:flex;flex-direction:column;gap:10px}
+@media(min-width:480px){.btn-row{flex-direction:row;flex-wrap:wrap}}
+.flash{
+  display:none;margin-top:14px;font-family:'IBM Plex Mono',monospace;
+  font-size:12px;color:var(--volt);letter-spacing:.05em;
+}
+
+.bottomnav{
+  position:fixed;bottom:0;left:0;right:0;z-index:50;
+  background:rgba(11,11,10,.96);backdrop-filter:blur(8px);
+  border-top:1px solid var(--hairline);
+  padding:12px var(--pad) calc(12px + env(safe-area-inset-bottom));
+}
+.bottomnav-inner{
+  max-width:640px;margin:0 auto;display:flex;gap:10px;align-items:center;
+}
+.bottomnav .btn{flex:1}
+.bottomnav .btn-back{flex:0 0 auto;border-color:var(--hairline);color:var(--muted)}
+.bottomnav .btn-back:hover{color:var(--chalk)}
+
+footer{
+  max-width:640px;margin:0 auto;padding:0 var(--pad) 20px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#55554E;
+}
 footer b{color:var(--volt);font-weight:500}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ---------- print: ref sheet from review ---------- */
+@media print{
+  body{background:#fff;color:#111;font-size:11px}
+  .topbar,.bottomnav,.btn,.btn-row,.flash,.err,#printHide,.rev-group h3 button{display:none!important}
+  .wrap{padding:0;max-width:none}
+  .screen{display:none!important}
+  #printArea{display:block!important}
+  #printArea .print-head{border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:14px}
+  #printArea .print-head .ph-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase}
+  #printArea .print-head h1{font-size:20px;color:#111;margin:4px 0 2px}
+  #printArea .print-head .ph-meta{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#333}
+  .rev-group{break-inside:avoid;margin-bottom:12px}
+  .rev-group h3{color:#111;font-size:11px}
+  .rev-rule{background:#111;margin:4px 0 6px}
+  .rev-item{padding:3px 0;font-size:10.5px;border-bottom:1px dotted #ccc}
+  .rev-item .rk{color:#444}
+  .rev-item .rv .none{color:#999}
+  .tag-custom{background:#111;color:#fff}
+  .custom-count{border-color:#111;color:#111;background:#fff;font-size:10px;padding:8px 10px;margin-bottom:12px}
+  .print-sign{margin-top:16px;border-top:1px solid #111;padding-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px}
+}
+#printArea{display:none}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="eyebrow">ACF / The Sport Authenticator</div>
-  <h1>Gameplay<br><span class="volt">Tools</span></h1>
-  <p class="lede">Purpose built tools for running events the right way. Every event on the same page, every official briefed, every rule on the record.</p>
 
-  <a class="tool" href="/rules-intake/">
-    <div class="t-tag">Pre Event</div>
-    <div class="t-name">Tournament Rules Intake</div>
-    <div class="t-desc">Organizers document their complete rule set in about 5 minutes. Custom rules get flagged for officials automatically.</div>
-  </a>
-
-  <a class="tool" href="/winner-stays/">
-    <div class="t-tag">Game Day</div>
-    <div class="t-name">Winner Stays</div>
-    <div class="t-desc">Single court tournament manager. Queue, rotation, and win tracking in one screen.</div>
-  </a>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span><b>ACF</b> / THE SPORT AUTHENTICATOR</span>
+      <span class="stepcount" id="stepCount"></span>
+    </div>
+    <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
+  </div>
 </div>
-<footer><b>ACF</b> / The Sport Authenticator</footer>
+
+<div class="wrap" id="app"></div>
+<div class="wrap" id="printArea"></div>
+
+<div class="bottomnav" id="bottomNav">
+  <div class="bottomnav-inner">
+    <button type="button" class="btn btn-ghost btn-back" id="btnBack">Back</button>
+    <button type="button" class="btn btn-primary" id="btnNext">Next</button>
+  </div>
+</div>
+
+<footer><b>ACF</b> / The Sport Authenticator · Official Rules Intake</footer>
+<script>
+/* ============================================================
+   CONFIG · one time setup
+   Paste your Google Apps Script web app URL between the quotes
+   to store every submission in a Google Sheet and email Mark.
+   Leave it empty and the form falls back to link handoff mode.
+   ============================================================ */
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbyooq0M8S7ueMOxZkDjpJMf3YhhlI5H5g27ofEbRJeCPD4hA6vsQKN-pHmZLunaTVr3/exec";
+
+/* ---------- base rule templates (starting points, all editable) ---------- */
+const TEMPLATES = {
+  "5v5 small sided": {
+    players_on_field:"5v5", goalkeepers:"Yes", roster_size:"8", min_players:"4",
+    subs:["On the fly","Unlimited"],
+    match_format:"2 halves", clock:"Running",
+    goal_limit:"Unlimited", mercy_rule:"None", golden_goal:"None",
+    touchline:"Kick-ins", offside:"No", corners:"Yes, standard", goal_line:"Goal kick",
+    fk_types:"Direct only", wall_distance:"5 meters",
+    slide_tackles:"Not allowed", advantage:"Yes", yellow_procedure:"Standard caution",
+    two_yellows:"Yes", red_suspension:["Rest of match"], replace_red:"No, team plays short",
+    accumulated_fouls:"None",
+    ball_size:"Size 4", boards:"No", shin_guards:"Required", jewelry:"None allowed",
+    jersey_conflict:"Home team changes or wears pinnies",
+    group_ties:"Yes", ko_ties:["Penalty kicks"], shootout:"Best of 3, then sudden death",
+    timekeeper:"Referee"
+  },
+  "7v7": {
+    players_on_field:"7v7", goalkeepers:"Yes", roster_size:"12", min_players:"5",
+    subs:["At stoppages","Unlimited"],
+    match_format:"2 halves", clock:"Running",
+    goal_limit:"Unlimited", mercy_rule:"None", golden_goal:"None",
+    touchline:"Throw-ins", offside:"Yes", corners:"Yes, standard", goal_line:"Goal kick",
+    fk_types:"Direct and indirect", wall_distance:"8 meters",
+    slide_tackles:"Not allowed", advantage:"Yes", yellow_procedure:"Standard caution",
+    two_yellows:"Yes", red_suspension:["Rest of match"], replace_red:"No, team plays short",
+    accumulated_fouls:"None",
+    ball_size:"Size 4", boards:"No", shin_guards:"Required", jewelry:"None allowed",
+    jersey_conflict:"Home team changes or wears pinnies",
+    group_ties:"Yes", ko_ties:["Penalty kicks"], shootout:"Best of 3, then sudden death",
+    timekeeper:"Referee"
+  },
+  "Futsal": {
+    players_on_field:"5v5", goalkeepers:"Yes", roster_size:"10", min_players:"4",
+    subs:["On the fly","Unlimited"],
+    match_format:"2 halves", clock:"Stopped", timeouts:"1 per half",
+    goal_limit:"Unlimited", mercy_rule:"None", golden_goal:"None",
+    touchline:"Kick-ins", offside:"No", corners:"Yes, standard", goal_line:"Goalkeeper throw",
+    fk_types:"Direct and indirect", wall_distance:"5 meters",
+    slide_tackles:"Not allowed", advantage:"Yes", yellow_procedure:"Standard caution",
+    two_yellows:"Yes", red_suspension:["Rest of match"], replace_red:"No, team plays short",
+    accumulated_fouls:"6th team foul and beyond is a direct kick, no wall",
+    ball_size:"Futsal ball (size 4, low bounce)", boards:"No", surface:"Indoor court",
+    shin_guards:"Required", jewelry:"None allowed",
+    jersey_conflict:"Home team changes or wears pinnies",
+    group_ties:"Yes", ko_ties:["Penalty kicks"], shootout:"Best of 3, then sudden death",
+    timekeeper:"Scorer's table"
+  },
+  "Start blank": {}
+};
+
+/* ---------- steps & questions ---------- */
+/* types: text | area | one (single chip) | many (multi chip) */
+const STEPS = [
+  { id:"event", title:"Event Basics", intro:"Who and where. Takes 30 seconds.",
+    qs:[
+      {k:"event_name", label:"Event name", type:"text"},
+      {k:"event_dates", label:"Event date(s)", type:"text", ph:"July 12 to 13, 2026"},
+      {k:"venue", label:"Venue", type:"text"},
+      {k:"director", label:"Tournament director", type:"text"},
+      {k:"ref_contact", label:"Day of contact for referees (name and phone)", type:"text"}
+  ]},
+  { id:"base", title:"How Do You Play?", intro:"Pick the closest match. We pre answer everything standard, and you only change what makes your event different.",
+    qs:[
+      {k:"base_template", label:"Base rule set", type:"one", opts:["5v5 small sided","7v7","Futsal","Start blank"], template:true},
+      {k:"players_on_field", label:"Players on field per team", type:"one", opts:["3v3","4v4","5v5","6v6","7v7"], other:true},
+      {k:"goalkeepers", label:"Goalkeepers?", type:"one", opts:["Yes","No"]}
+  ], note:"Everything the template fills in stays fully editable on the next screens."},
+  { id:"roster", title:"Rosters & Subs", qs:[
+      {k:"roster_size", label:"Max roster size", type:"one", opts:["7","8","10","12","15"], other:true},
+      {k:"min_players", label:"Minimum players to start", type:"one", opts:["3","4","5","7"], other:true},
+      {k:"subs", label:"Substitutions", type:"many", opts:["On the fly","At stoppages","Unlimited"], other:true}
+  ]},
+  { id:"timing", title:"Match Timing", qs:[
+      {k:"match_format", label:"Game format", type:"one", opts:["2 halves","4 quarters","1 straight game"], other:true},
+      {k:"period_length", label:"Length of each (minutes)", type:"one", opts:["8","10","12","15","20","25"], other:true},
+      {k:"halftime", label:"Halftime or break (minutes)", type:"one", opts:["None","1","2","3","5"], other:true},
+      {k:"clock", label:"Clock", type:"one", opts:["Running","Stopped"]},
+      {k:"timeouts", label:"Timeouts", type:"one", opts:["None","1 per half","1 per game"], other:true}
+  ]},
+  { id:"scoring", title:"Scoring", qs:[
+      {k:"goal_limit", label:"Goal limit", type:"one", opts:["Unlimited","First to a target wins"]},
+      {k:"goal_target", label:"If first to a target, how many goals", type:"text", ph:"e.g. 5", showIf:{k:"goal_limit", v:"First to a target wins"}},
+      {k:"mercy_rule", label:"Mercy rule", type:"one", opts:["None","Game ends at +5","Game ends at +8"], other:true},
+      {k:"golden_goal", label:"Golden goal", type:"one", opts:["None","Overtime only","Any tied game"], other:true},
+      {k:"scoring_notes", label:"Special scoring rules", type:"area", ph:"Double goals, bonus points, anything a scoreboard operator or ref must know"}
+  ]},
+  { id:"restarts", title:"Restarts", qs:[
+      {k:"touchline", label:"Ball out on the sideline", type:"one", opts:["Kick-ins","Throw-ins"], other:true},
+      {k:"goal_line", label:"Ball out over the goal line (defense last touch)", type:"one", opts:["Goal kick","Goalkeeper throw"], other:true},
+      {k:"corners", label:"Corner kicks", type:"one", opts:["Yes, standard","No corners"], other:true},
+      {k:"offside", label:"Offside?", type:"one", opts:["Yes","No"]},
+      {k:"fk_types", label:"Free kicks", type:"one", opts:["Direct only","Direct and indirect"], other:true},
+      {k:"wall_distance", label:"Defender distance on free kicks and kick-ins (meters)", type:"one", opts:["3 meters","5 meters","8 meters","10 meters"], other:true}
+  ]},
+  { id:"cards", title:"Contact & Cards", qs:[
+      {k:"slide_tackles", label:"Slide tackles", type:"one", opts:["Not allowed","Goalkeeper only","Allowed"]},
+      {k:"advantage", label:"Referee plays advantage?", type:"one", opts:["Yes","No"]},
+      {k:"yellow_procedure", label:"Yellow card procedure", type:"one", opts:["Standard caution","2 minutes off, sub allowed","2 minutes off, no sub"], other:true},
+      {k:"two_yellows", label:"Two yellows equal a red?", type:"one", opts:["Yes","No"]},
+      {k:"red_suspension", label:"Red card suspension", type:"many", opts:["Rest of match","Next match","Rest of tournament"]},
+      {k:"replace_red", label:"Can the team replace a sent off player?", type:"one", opts:["Yes, back to full strength","No, team plays short"]},
+      {k:"accumulated_fouls", label:"Accumulated team fouls rule", type:"one", opts:["None","6th team foul and beyond is a direct kick, no wall"], other:true},
+      {k:"sideline_misconduct", label:"Coach or spectator misconduct procedure", type:"text", ph:"e.g. one warning, then dismissal from venue"}
+  ]},
+  { id:"field", title:"Field & Gear", qs:[
+      {k:"surface", label:"Playing surface", type:"one", opts:["Turf","Grass","Indoor court","Blacktop"], other:true},
+      {k:"ball_size", label:"Ball", type:"one", opts:["Size 3","Size 4","Size 5","Futsal ball (size 4, low bounce)"], other:true},
+      {k:"boards", label:"Side boards or walls?", type:"one", opts:["Yes","No"]},
+      {k:"penalty_area", label:"Penalty area or crease rules", type:"text", ph:"e.g. no players inside the crease, GK box only"},
+      {k:"shin_guards", label:"Shin guards", type:"one", opts:["Required","Recommended","Not required"]},
+      {k:"jewelry", label:"Jewelry", type:"one", opts:["None allowed","Taped over is OK"], other:true},
+      {k:"jersey_conflict", label:"Jersey color conflict", type:"one", opts:["Home team changes or wears pinnies","Away team changes or wears pinnies"], other:true}
+  ]},
+  { id:"ties", title:"Ties & Advancement", qs:[
+      {k:"group_ties", label:"Can group stage games end tied?", type:"one", opts:["Yes","No"]},
+      {k:"group_tiebreakers", label:"Group standings tiebreakers, in order", type:"text", ph:"e.g. head to head, goal difference, goals scored"},
+      {k:"ko_ties", label:"Tied knockout games decided by", type:"many", opts:["Penalty kicks","Golden goal","Extra time"]},
+      {k:"shootout", label:"Shootout format", type:"one", opts:["Best of 3, then sudden death","Best of 5, then sudden death"], other:true}
+  ]},
+  { id:"admin", title:"Admin & Referee Logistics", qs:[
+      {k:"timekeeper", label:"Official time kept by", type:"one", opts:["Referee","Scorer's table"], other:true},
+      {k:"scorekeeper", label:"Official score kept by", type:"one", opts:["Referee","Scorer's table"], other:true},
+      {k:"ref_arrival", label:"Referee arrival before first game", type:"one", opts:["30 minutes","45 minutes","60 minutes"], other:true},
+      {k:"ref_payment", label:"Referee payment (rate and method)", type:"text", ph:"e.g. $40 per game, cash on site"},
+      {k:"weather", label:"Weather or lightning policy", type:"text"},
+      {k:"medical", label:"Medical plan on site", type:"text", ph:"e.g. certified trainer at field 1"},
+      {k:"final_authority", label:"Final authority on rule disputes", type:"text", ph:"e.g. tournament director"}
+  ]},
+  { id:"custom", title:"Your Custom Rules", intro:"The most important screen. If a referee would be surprised by it, it belongs here.",
+    qs:[
+      {k:"custom_rules", label:"Rules unique to your event", type:"area", ph:"Anything that differs from standard soccer or futsal", tall:true},
+      {k:"points_of_emphasis", label:"Points of emphasis for officials", type:"area", ph:"What you want called tight, what you want let go"}
+  ]}
+];
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+(function(){
+  const app = document.getElementById('app');
+  const nav = document.getElementById('bottomNav');
+  const btnBack = document.getElementById('btnBack');
+  const btnNext = document.getElementById('btnNext');
+  const stepCount = document.getElementById('stepCount');
+  const meterFill = document.getElementById('meterFill');
+
+  const answers = {};          // k -> string | string[]
+  const touched = new Set();   // keys the user personally set
+  let templateVals = {};       // values applied by chosen template
+  let current = -1;            // -1 welcome, 0..N steps, N review, N+1 done
+  const REVIEW = STEPS.length;
+  const DONE = STEPS.length + 1;
+  const TOTAL_SCREENS = STEPS.length + 1; // steps + review, for the meter
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const eq = (a,b) => JSON.stringify(a)===JSON.stringify(b);
+
+  function setAnswer(k, v, byUser){
+    if(v===undefined || v===null || (Array.isArray(v)&&!v.length) || v===''){ delete answers[k]; }
+    else answers[k]=v;
+    if(byUser) touched.add(k);
+  }
+
+  function applyTemplate(name){
+    templateVals = TEMPLATES[name] || {};
+    Object.keys(templateVals).forEach(k=>{
+      if(!touched.has(k)) setAnswer(k, Array.isArray(templateVals[k]) ? [...templateVals[k]] : templateVals[k], false);
+    });
+    // remove stale template values from a previously chosen template
+    Object.keys(answers).forEach(k=>{
+      if(!touched.has(k) && k!=='base_template' && templateVals[k]===undefined){
+        const fromAnyTemplate = Object.values(TEMPLATES).some(t=>t[k]!==undefined);
+        if(fromAnyTemplate) delete answers[k];
+      }
+    });
+  }
+
+  /* ---------- rendering ---------- */
+  function chipHTML(q, opt, checked, multi){
+    return `<label class="chip"><input type="${multi?'checkbox':'radio'}" name="${q.k}" value="${esc(opt)}" ${checked?'checked':''}><span>${esc(opt)}</span></label>`;
+  }
+
+  function questionHTML(q){
+    const v = answers[q.k];
+    let inner = '';
+    if(q.type==='text'){
+      inner = `<input type="text" data-k="${q.k}" value="${v!==undefined?esc(v):''}" placeholder="${esc(q.ph||'')}" autocomplete="off">`;
+    } else if(q.type==='area'){
+      inner = `<textarea data-k="${q.k}" ${q.tall?'style="min-height:150px"':''} placeholder="${esc(q.ph||'')}">${v!==undefined?esc(v):''}</textarea>`;
+    } else if(q.type==='one'){
+      const inOpts = q.opts.includes(v);
+      const otherActive = v!==undefined && !inOpts;
+      inner = `<div class="chips">` +
+        q.opts.map(o=>chipHTML(q,o,v===o,false)).join('') +
+        (q.other?`<label class="chip"><input type="radio" name="${q.k}" value="__other" ${otherActive?'checked':''}><span>Other</span></label>`:'') +
+        `</div>` +
+        (q.other?`<div class="otherbox ${otherActive?'show':''}"><input type="text" data-other="${q.k}" value="${otherActive?esc(v):''}" placeholder="Type your rule" autocomplete="off"></div>`:'');
+    } else if(q.type==='many'){
+      const arr = Array.isArray(v)?v:[];
+      const extras = arr.filter(x=>!q.opts.includes(x));
+      const otherActive = extras.length>0;
+      inner = `<div class="chips">` +
+        q.opts.map(o=>chipHTML(q,o,arr.includes(o),true)).join('') +
+        (q.other?`<label class="chip"><input type="checkbox" name="${q.k}" value="__other" ${otherActive?'checked':''}><span>Other</span></label>`:'') +
+        `</div>` +
+        (q.other?`<div class="otherbox ${otherActive?'show':''}"><input type="text" data-other="${q.k}" value="${esc(extras.join(', '))}" placeholder="Type your rule" autocomplete="off"></div>`:'');
+    }
+    const hidden = q.showIf && answers[q.showIf.k]!==q.showIf.v ? 'style="display:none"' : '';
+    return `<div class="q" data-q="${q.k}" ${hidden}><label class="qlabel">${esc(q.label)}</label>${inner}</div>`;
+  }
+
+  function renderWelcome(){
+    app.innerHTML = `
+      <div class="screen active">
+        <div class="eyebrow">Official Rules Intake · Pre Event</div>
+        <h1>Tournament<br>Rules <span class="volt">Intake</span></h1>
+        <p class="intro">Referees will run your event exactly as you answer here, and your organization is agreeing to run it the same way. A few taps per screen, about 5 minutes.</p>
+        <p class="intro" style="margin-top:10px">Start by telling us how you play, and we pre answer everything standard. You only change what makes your event yours.</p>
+      </div>`;
+    btnBack.style.visibility='hidden';
+    btnNext.textContent='Start';
+    stepCount.textContent='';
+  }
+
+  function renderStep(i){
+    const s = STEPS[i];
+    app.innerHTML = `
+      <div class="screen active">
+        <div class="eyebrow">Step ${String(i+1).padStart(2,'0')} of ${STEPS.length}</div>
+        <h2>${esc(s.title)}</h2>
+        ${s.intro?`<p class="intro">${esc(s.intro)}</p>`:''}
+        <div class="sec-rule"></div>
+        ${s.qs.map(questionHTML).join('')}
+        ${s.note?`<p class="tpl-note">${esc(s.note)}</p>`:''}
+      </div>`;
+    wireStep(s);
+    btnBack.style.visibility='visible';
+    btnNext.textContent = i===STEPS.length-1 ? 'Review' : 'Next';
+    stepCount.textContent = `STEP ${i+1}/${STEPS.length}`;
+  }
+
+  function wireStep(s){
+    s.qs.forEach(q=>{
+      const qEl = app.querySelector(`[data-q="${q.k}"]`);
+      if(!qEl) return;
+      if(q.type==='text'||q.type==='area'){
+        qEl.querySelector('[data-k]').addEventListener('input', e=>{
+          setAnswer(q.k, e.target.value.trim(), true);
+          refreshShowIf(s);
+        });
+      } else {
+        const otherInput = qEl.querySelector(`[data-other="${q.k}"]`);
+        const otherBox = qEl.querySelector('.otherbox');
+        qEl.querySelectorAll(`input[name="${q.k}"]`).forEach(inp=>{
+          inp.addEventListener('change', ()=>{
+            if(q.type==='one'){
+              if(inp.value==='__other'){
+                otherBox.classList.add('show');
+                setAnswer(q.k, otherInput.value.trim(), true);
+                otherInput.focus();
+              } else {
+                if(otherBox) otherBox.classList.remove('show');
+                setAnswer(q.k, inp.value, true);
+              }
+              if(q.template){ applyTemplate(inp.value); renderStep(current); return; }
+            } else {
+              const picked = [...qEl.querySelectorAll(`input[name="${q.k}"]:checked`)].map(x=>x.value);
+              const hasOther = picked.includes('__other');
+              if(otherBox) otherBox.classList.toggle('show', hasOther);
+              let arr = picked.filter(x=>x!=='__other');
+              if(hasOther && otherInput.value.trim()) arr = arr.concat(otherInput.value.trim());
+              setAnswer(q.k, arr, true);
+            }
+            refreshShowIf(s);
+          });
+        });
+        if(otherInput){
+          otherInput.addEventListener('input', ()=>{
+            if(q.type==='one'){ setAnswer(q.k, otherInput.value.trim(), true); }
+            else {
+              const picked = [...qEl.querySelectorAll(`input[name="${q.k}"]:checked`)].map(x=>x.value).filter(x=>x!=='__other');
+              const arr = otherInput.value.trim() ? picked.concat(otherInput.value.trim()) : picked;
+              setAnswer(q.k, arr, true);
+            }
+          });
+        }
+      }
+    });
+  }
+
+  function refreshShowIf(s){
+    s.qs.forEach(q=>{
+      if(!q.showIf) return;
+      const el = app.querySelector(`[data-q="${q.k}"]`);
+      if(el) el.style.display = answers[q.showIf.k]===q.showIf.v ? '' : 'none';
+    });
+  }
+
+  /* ---------- review ---------- */
+  function customKeys(){
+    const keys = [];
+    STEPS.forEach(s=>s.qs.forEach(q=>{
+      if(q.k==='base_template') return;
+      const t = templateVals[q.k];
+      if(t!==undefined && answers[q.k]!==undefined && !eq(answers[q.k], t)) keys.push(q.k);
+    }));
+    if(answers.custom_rules) keys.push('custom_rules');
+    return [...new Set(keys)];
+  }
+
+  function reviewGroupsHTML(withEdit){
+    const customs = customKeys();
+    return STEPS.map((s,i)=>{
+      const rows = s.qs.map(q=>{
+        const v = answers[q.k];
+        const val = v===undefined ? '<span class="none">—</span>'
+          : esc(Array.isArray(v)?v.join(', '):v);
+        const tag = customs.includes(q.k) ? '<span class="tag-custom">CUSTOM</span>' : '';
+        return `<div class="rev-item"><div class="rk">${esc(q.label)}</div><div class="rv">${val}${tag}</div></div>`;
+      }).join('');
+      return `<div class="rev-group">
+        <h3><span>${String(i+1).padStart(2,'0')} · ${esc(s.title)}</span>${withEdit?`<button type="button" data-edit="${i}">Edit</button>`:''}</h3>
+        <div class="rev-rule"></div>${rows}</div>`;
+    }).join('');
+  }
+
+  function renderReview(){
+    const customs = customKeys();
+    const today = new Date().toISOString().slice(0,10);
+    if(!answers.sign_date) answers.sign_date = today;
+    app.innerHTML = `
+      <div class="screen active">
+        <div class="eyebrow">Review &amp; Sign</div>
+        <h2>Your Rule Set</h2>
+        <p class="intro">Volt tags mark where your event differs from standard. That is exactly what your referee will study.</p>
+        <div class="sec-rule"></div>
+        <div class="custom-count">${customs.length} CUSTOM RULE${customs.length===1?'':'S'} FLAGGED FOR OFFICIALS</div>
+        ${reviewGroupsHTML(true)}
+        <div class="attest">
+          <div class="row">
+            <input type="checkbox" id="attest" ${answers.attestation?'checked':''}>
+            <p>I confirm these rules are complete and accurate. Our organization will administer this event as documented here, and assigned officials will enforce exactly what is written above.</p>
+          </div>
+        </div>
+        <div class="q"><label class="qlabel">Full name</label><input type="text" data-k="sign_name" value="${answers.sign_name?esc(answers.sign_name):''}" autocomplete="name"></div>
+        <div class="q"><label class="qlabel">Title or role</label><input type="text" data-k="sign_title" value="${answers.sign_title?esc(answers.sign_title):''}"></div>
+        <p class="err" id="submitErr"></p>
+      </div>`;
+    app.querySelector('#attest').addEventListener('change', e=>{ answers.attestation = e.target.checked ? 'Confirmed' : undefined; if(!e.target.checked) delete answers.attestation; });
+    app.querySelectorAll('[data-k]').forEach(inp=>inp.addEventListener('input', e=>setAnswer(e.target.dataset.k, e.target.value.trim(), true)));
+    app.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click', ()=>go(parseInt(b.dataset.edit,10))));
+    btnBack.style.visibility='visible';
+    btnNext.textContent='Submit Rules';
+    stepCount.textContent='REVIEW';
+  }
+
+  /* ---------- encode link ---------- */
+  function b64uEncode(bytes){
+    let bin=''; bytes.forEach(b=>bin+=String.fromCharCode(b));
+    return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+  function b64uDecode(str){
+    str = str.replace(/-/g,'+').replace(/_/g,'/');
+    while(str.length%4) str+='=';
+    return Uint8Array.from(atob(str), c=>c.charCodeAt(0));
+  }
+  async function encodeLink(payload){
+    const raw = new TextEncoder().encode(JSON.stringify(payload));
+    if(typeof CompressionStream !== 'undefined'){
+      try{
+        const stream = new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate-raw'));
+        const buf = new Uint8Array(await new Response(stream).arrayBuffer());
+        return location.origin + location.pathname + '#d=' + b64uEncode(buf);
+      }catch(e){}
+    }
+    return location.origin + location.pathname + '#j=' + b64uEncode(raw);
+  }
+  async function decodeHash(hash){
+    try{
+      if(hash.startsWith('d=')){
+        const stream = new Blob([b64uDecode(hash.slice(2))]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        return JSON.parse(await new Response(stream).text());
+      }
+      if(hash.startsWith('j=')) return JSON.parse(new TextDecoder().decode(b64uDecode(hash.slice(2))));
+    }catch(e){ console.warn('Could not read submission link', e); }
+    return null;
+  }
+
+  /* ---------- submit ---------- */
+  let lastLink = '';
+  async function submit(){
+    const err = document.getElementById('submitErr');
+    if(!answers.attestation || !answers.sign_name){
+      err.textContent = !answers.attestation
+        ? 'CHECK THE CONFIRMATION BOX TO SUBMIT.'
+        : 'ADD YOUR FULL NAME TO SUBMIT.';
+      err.style.display='block';
+      return;
+    }
+    btnNext.disabled = true; btnNext.textContent = 'Submitting…';
+    const payload = {
+      ...answers,
+      base_template: answers.base_template || 'Not selected',
+      custom_keys: customKeys(),
+      submitted_at: new Date().toISOString()
+    };
+    lastLink = await encodeLink(payload);
+    payload.review_link = lastLink;
+    let stored = false;
+    if(SHEET_ENDPOINT){
+      try{
+        await fetch(SHEET_ENDPOINT, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload)});
+        stored = true;
+      }catch(e){ stored = false; }
+    }
+    history.replaceState(null,'',lastLink);
+    renderDone(stored);
+  }
+
+  function renderDone(stored){
+    const customs = customKeys();
+    app.innerHTML = `
+      <div class="screen active">
+        <div class="done-mark"></div>
+        <h2>Rules ${stored?'Submitted':'Ready to Send'}</h2>
+        <p class="intro">${stored
+          ? 'Your rule set was sent to ACF and your organizer copy is below. Officials assigned to your event will be briefed from exactly what you submitted.'
+          : 'One last step: copy your completed link below and send it to your ACF contact by text or email. It contains every answer.'}</p>
+        <div class="done-detail">
+          EVENT · <b>${esc(answers.event_name||'—')}</b><br>
+          SIGNED · <b>${esc(answers.sign_name||'—')}</b> · ${esc(answers.sign_date||'')}<br>
+          CUSTOM RULES FLAGGED · <b>${customs.length}</b>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn ${stored?'btn-ghost':'btn-primary'}" id="btnCopyLink">Copy completed link</button>
+          <button type="button" class="btn btn-ghost" id="btnPdf">Save PDF copy</button>
+        </div>
+        <div class="flash" id="flash"></div>
+      </div>`;
+    nav.style.display='none';
+    stepCount.textContent='DONE';
+    meterFill.style.width='100%';
+    buildPrintArea();
+    document.getElementById('btnCopyLink').addEventListener('click', async ()=>{
+      const ok = await copyText(lastLink);
+      const f = document.getElementById('flash');
+      f.textContent = ok ? 'LINK COPIED. SEND IT TO YOUR ACF CONTACT.' : 'COPY BLOCKED. THE LINK IS IN YOUR ADDRESS BAR.';
+      f.style.display='block';
+    });
+    document.getElementById('btnPdf').addEventListener('click', ()=>window.print());
+  }
+
+  async function copyText(text){
+    try{ await navigator.clipboard.writeText(text); return true; }
+    catch(e){
+      const ta=document.createElement('textarea'); ta.value=text;
+      document.body.appendChild(ta); ta.select();
+      try{ return document.execCommand('copy'); }catch(e2){ return false; }
+      finally{ document.body.removeChild(ta); }
+    }
+  }
+
+  function buildPrintArea(){
+    const pa = document.getElementById('printArea');
+    pa.innerHTML = `
+      <div class="print-head">
+        <div class="ph-eyebrow">ACF / The Sport Authenticator · Official Rule Set</div>
+        <h1>${esc(answers.event_name||'Tournament Rules')}</h1>
+        <div class="ph-meta">${esc(answers.event_dates||'')} · ${esc(answers.venue||'')} · Base: ${esc(answers.base_template||'—')}</div>
+      </div>
+      <div class="custom-count">${customKeys().length} CUSTOM RULES FLAGGED · REVIEW TAGGED ITEMS FIRST</div>
+      ${reviewGroupsHTML(false)}
+      <div class="print-sign">Confirmed accurate by ${esc(answers.sign_name||'—')}${answers.sign_title?', '+esc(answers.sign_title):''} · ${esc(answers.sign_date||'')} · Submitted ${new Date().toLocaleString()}</div>`;
+  }
+
+  /* ---------- navigation ---------- */
+  function go(i){
+    current = i;
+    window.scrollTo(0,0);
+    if(i===-1) renderWelcome();
+    else if(i<STEPS.length) renderStep(i);
+    else if(i===REVIEW) renderReview();
+    const pct = i<0 ? 0 : Math.min(100, Math.round(((i+1)/(TOTAL_SCREENS+1))*100));
+    meterFill.style.width = pct+'%';
+  }
+  btnNext.addEventListener('click', ()=>{
+    if(current===REVIEW){ submit(); return; }
+    go(current+1);
+  });
+  btnBack.addEventListener('click', ()=>{ if(current>-1) go(current-1); });
+
+  /* ---------- load a completed link (Mark's view) ---------- */
+  (async function init(){
+    const hash = location.hash.replace(/^#/,'');
+    if(hash){
+      const data = await decodeHash(hash);
+      if(data){
+        Object.keys(data).forEach(k=>{
+          if(['custom_keys','submitted_at','review_link'].includes(k)) return;
+          answers[k]=data[k]; touched.add(k);
+        });
+        templateVals = TEMPLATES[data.base_template] || {};
+        lastLink = location.href;
+        go(REVIEW);
+        btnNext.textContent='Resubmit Rules';
+        return;
+      }
+    }
+    go(-1);
+  })();
+})();
+</script>
 </body>
 </html>
